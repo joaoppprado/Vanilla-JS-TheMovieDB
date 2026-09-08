@@ -30,9 +30,7 @@ async function homePopularMovies() {
 }
 
 async function homeTopMovies() {
-  const container = document.querySelector(
-    ".section__movie-cards-new-releases",
-  );
+  const container = document.querySelector(".section__movie-cards-top-rated");
   try {
     const data = await API.getTopRatedMovies();
     const homeMovies = data.results.slice(0, 10);
