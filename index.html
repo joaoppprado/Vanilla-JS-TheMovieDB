@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./src/css/pages/home.css" />
     <title>Cine Catalog</title>
   </head>
-  <body>
+  <body id="home-page">
     <header class="header">
       <div class="container">
         <a href="index.html" class="header__logo">
@@ -55,9 +55,7 @@
               <a class="navigation__link" href="./popular.html">Popular</a>
             </li>
             <li class="navigation__item">
-              <a class="navigation__link" href="./newReleases.html"
-                >New releases</a
-              >
+              <a class="navigation__link" href="./topRated.html">Top Rated</a>
             </li>
             <li class="navigation__item">
               <a class="navigation__link" href="./myMovies.html">My movies</a>
@@ -83,15 +81,15 @@
           <h2 class="section__title">Popular</h2>
           <a href="./popular.html" class="section__see-more">See More</a>
         </header>
-        <div class="section__movie-cards section__movie-cards-popular"></div>
+        <div class="section__movie-cards" id="home-popular"></div>
       </section>
 
       <section class="section section__top-rated">
         <header class="section__header">
           <h2 class="section__title">Top Rated</h2>
-          <a href="./newReleases.html" class="section__see-more">See More</a>
+          <a href="./topRated.html" class="section__see-more">See More</a>
         </header>
-        <div class="section__movie-cards section__movie-cards-top-rated"></div>
+        <div class="section__movie-cards" id="home-top-rated"></div>
       </section>
     </main>
 
