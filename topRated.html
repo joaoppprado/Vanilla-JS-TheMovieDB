@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="./src/css/main.css" />
-    <title>CineCatalog | New Releases</title>
+    <title>CineCatalog | Top Rated</title>
   </head>
-  <body>
+  <body id="top-rated-page">
     <header class="header">
       <div class="container">
         <a href="index.html" class="header__logo">
@@ -54,9 +54,7 @@
               <a class="navigation__link" href="./popular.html">Popular</a>
             </li>
             <li class="navigation__item">
-              <a class="navigation__link" href="./newReleases.html"
-                >New releases</a
-              >
+              <a class="navigation__link" href="./topRated.html">Top Rated</a>
             </li>
             <li class="navigation__item">
               <a class="navigation__link" href="./myMovies.html">My movies</a>
@@ -68,7 +66,7 @@
 
     <main class="main container">
       <header class="page-heading">
-        <h1 class="page-heading__title">New Releases</h1>
+        <h1 class="page-heading__title">Top Rated</h1>
       </header>
       <div class="filters" aria-label="Genre Filters">
         <button class="filter filter--active">All</button>
@@ -79,10 +77,10 @@
         <button class="filter">Romance</button>
       </div>
 
-      <section class="section__movie-cards"></section>
+      <section class="section__movie-cards" id="top-rated-movies"></section>
     </main>
 
     <footer><p>© 2026 CineCatalog · João Pedro P. Prado</p></footer>
-    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/JS/main.js"></script>
   </body>
 </html>
