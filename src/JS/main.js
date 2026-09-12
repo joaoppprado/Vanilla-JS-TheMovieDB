@@ -7,10 +7,7 @@ const menu = document.querySelector(".navigation__menu");
 const isHomePage = document.getElementById("home-page");
 const isPopularPage = document.getElementById("popular-page");
 const isTopRatedPage = document.getElementById("top-rated-page");
-const filterAll = document.querySelector('[data-genre="all"]');
-const filters = document.querySelectorAll(
-  '[data-genre]:not([data-genre="all"])',
-);
+const filters = document.querySelectorAll(".filter");
 
 if (menuButton && menu) {
   menuButton.addEventListener("click", () => {
@@ -24,25 +21,18 @@ if (menuButton && menu) {
   });
 }
 
-filterAll.addEventListener("click", () => {
-  filterAll.classList.add("filter--active");
-
-  filters.forEach((filter) => {
-    filter.classList.remove("filter--active");
-  });
-});
-
 filters.forEach((filter) => {
   filter.addEventListener("click", () => {
-    filterAll.classList.remove("filter--active");
-    filter.classList.toggle("filter--active");
-    const anyActive = Array.from(filters).some((filter) =>
-      filter.classList.contains("filter--active"),
-    );
-    console.log(Array.from(filters));
-    if (!anyActive) {
-      filterAll.classList.add("filter--active");
+    const activeButton = document.querySelector(".filter--active");
+    if (activeButton) {
+      activeButton.classList.remove("filter--active");
     }
+    filter.classList.add("filter--active");
+    if (filter.dataset.genre == "all") {
+      location.reload();
+      return;
+    }
+    filterGenre(filter.dataset.genre);
   });
 });
 
@@ -97,6 +87,52 @@ async function PageTopRatedMovies() {
     UI.renderMovieList(movies, container);
   } catch (error) {
     console.log(error);
+  }
+}
+
+async function filterGenre(genreId) {
+  if (isPopularPage) {
+    const container = document.querySelector("#popular-movies");
+    try {
+      const page1 = await API.getFilteredMovies(genreId, "popularity", 1);
+      const page2 = await API.getFilteredMovies(genreId, "popularity", 2);
+      const page3 = await API.getFilteredMovies(genreId, "popularity", 3);
+
+      const movies = [...page1.results, ...page2.results, ...page3.results];
+
+      UI.renderMovieList(movies, container);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  if (isTopRatedPage) {
+    const container = document.querySelector("#top-rated-movies");
+    try {
+      const page1 = await API.getFilteredMovies(
+        genreId,
+        "vote_average",
+        1,
+        "&without_genres=99,10755&vote_count.gte=200",
+      );
+      const page2 = await API.getFilteredMovies(
+        genreId,
+        "vote_average",
+        2,
+        "&without_genres=99,10755&vote_count.gte=200",
+      );
+      const page3 = await API.getFilteredMovies(
+        genreId,
+        "vote_average",
+        3,
+        "&without_genres=99,10755&vote_count.gte=200",
+      );
+
+      const movies = [...page1.results, ...page2.results, ...page3.results];
+
+      UI.renderMovieList(movies, container);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
