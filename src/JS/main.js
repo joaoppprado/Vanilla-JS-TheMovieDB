@@ -7,6 +7,10 @@ const menu = document.querySelector(".navigation__menu");
 const isHomePage = document.getElementById("home-page");
 const isPopularPage = document.getElementById("popular-page");
 const isTopRatedPage = document.getElementById("top-rated-page");
+const filterAll = document.querySelector('[data-genre="all"]');
+const filters = document.querySelectorAll(
+  '[data-genre]:not([data-genre="all"])',
+);
 
 if (menuButton && menu) {
   menuButton.addEventListener("click", () => {
@@ -19,6 +23,28 @@ if (menuButton && menu) {
     menu.classList.toggle("hidden", isOpen);
   });
 }
+
+filterAll.addEventListener("click", () => {
+  filterAll.classList.add("filter--active");
+
+  filters.forEach((filter) => {
+    filter.classList.remove("filter--active");
+  });
+});
+
+filters.forEach((filter) => {
+  filter.addEventListener("click", () => {
+    filterAll.classList.remove("filter--active");
+    filter.classList.toggle("filter--active");
+    const anyActive = Array.from(filters).some((filter) =>
+      filter.classList.contains("filter--active"),
+    );
+    console.log(Array.from(filters));
+    if (!anyActive) {
+      filterAll.classList.add("filter--active");
+    }
+  });
+});
 
 async function homePopularMovies() {
   const container = document.querySelector("#home-popular");
