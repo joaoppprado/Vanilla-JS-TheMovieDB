@@ -53,8 +53,8 @@ async function getTopRatedMovies(page = 1) {
   }
 }
 
-async function getFilteredMovies(genreId, sortBy) {
-  const url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=${sortBy}.desc&language=en-US&page=1`;
+async function getFilteredMovies(genreId, sortBy, page, urlAdjunct = null) {
+  const url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=${sortBy}.desc&language=en-US&page=${page}${urlAdjunct ? urlAdjunct : ""}`;
   try {
     const response = await fetch(url, {
       method: "GET",
