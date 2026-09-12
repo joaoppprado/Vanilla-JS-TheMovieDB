@@ -19,6 +19,7 @@ function createMovieCard(movie) {
   const movieYear = createElement("span", "movie-card__movie-year");
   const movieRating = createElement("span", "movie-card__movie-rate");
 
+  card.dataset.movieId = movie.id;
   cardCover.style.backgroundImage = `url('${IMAGE_BASE_URL}${movie.poster_path}')`;
   movieName.innerText = movie.title;
   movieYear.innerText = UTILS.getReleaseYear(movie.release_date);
