@@ -81,6 +81,55 @@
     </main>
 
     <footer><p>© 2026 CineCatalog · João Pedro P. Prado</p></footer>
+
+    <!-- Modal -->
+    <dialog class="modal" role="dialog" aria-modal="true">
+      <button class="modal__close" aria-label="Close modal">&times;</button>
+      <div class="modal__cover"></div>
+      <div class="modal__content">
+        <h2 class="modal__title">N/A</h2>
+
+        <div class="modal__info">
+          <span class="banner__rating">--</span>
+          <span class="modal__year">----</span>
+          <span class="modal__duration">---</span>
+        </div>
+
+        <div class="modal__genre-row"></div>
+
+        <p class="modal__description">N/A</p>
+
+        <div class="modal__actions">
+          <button class="btn btn--secondary" id="btn-watched">
+            <img
+              src="./src/assets/Check.svg"
+              alt=""
+              class="btn__icon"
+              aria-hidden="true"
+            />
+            Watched
+          </button>
+          <button class="btn btn--secondary" id="btn-later">
+            <img
+              src="./src/assets/Clock.svg"
+              alt=""
+              class="btn__icon"
+              aria-hidden="true"
+            />
+            Watch Later
+          </button>
+          <button class="btn btn--secondary btn-full" id="btn-favorite">
+            <img
+              src="./src/assets/Heart.svg"
+              alt=""
+              class="btn__icon"
+              aria-hidden="true"
+            />
+            Favorite
+          </button>
+        </div>
+      </div>
+    </dialog>
     <script type="module" src="./src/JS/main.js"></script>
   </body>
 </html>
