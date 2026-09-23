@@ -13,8 +13,8 @@
 }
 
 .modal::backdrop {
-  background-color: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(1.5px);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 }
 
 .modal__close {
