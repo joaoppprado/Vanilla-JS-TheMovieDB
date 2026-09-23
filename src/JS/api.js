@@ -78,7 +78,30 @@ async function getFilteredMovies(genreId, sortBy, page, urlAdjunct = null) {
   }
 }
 
-async function getMovieDetails(id) {}
+async function getMovieDetails(id) {
+  const url = `${BASE_URL}/movie/${id}`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${TMDB_TOKEN}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Error: Get movie details didn't work. API code error = ${response.status}`,
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("API error (getMovieDetails): ", error);
+    throw error;
+  }
+}
 
 async function searchMovieByName(query) {}
 
@@ -86,4 +109,5 @@ export const API = {
   getPopularMovies,
   getTopRatedMovies,
   getFilteredMovies,
+  getMovieDetails,
 };

@@ -8,6 +8,9 @@ const isHomePage = document.getElementById("home-page");
 const isPopularPage = document.getElementById("popular-page");
 const isTopRatedPage = document.getElementById("top-rated-page");
 const filters = document.querySelectorAll(".filter");
+const modal = document.querySelector(".modal");
+const modalCloseBtn = document.querySelector(".modal__close");
+const cardsContainers = document.querySelectorAll(".section__movie-cards");
 
 if (menuButton && menu) {
   menuButton.addEventListener("click", () => {
@@ -20,6 +23,25 @@ if (menuButton && menu) {
     menu.classList.toggle("hidden", isOpen);
   });
 }
+
+modalCloseBtn.addEventListener("click", () => {
+  modal.close();
+});
+
+modal.addEventListener("close", () => {
+  document.body.style.overflow = "auto";
+});
+
+cardsContainers.forEach((container) => {
+  container.addEventListener("click", (event) => {
+    const card = event.target.closest("article");
+    if (card) {
+      getMovieDetails(card.dataset.movieId);
+      modal.showModal();
+      document.body.style.overflow = "hidden";
+    }
+  });
+});
 
 filters.forEach((filter) => {
   filter.addEventListener("click", () => {
@@ -135,6 +157,17 @@ async function filterGenre(genreId) {
     }
   }
 }
+
+async function getMovieDetails(movieId) {
+  try {
+    const movie = await API.getMovieDetails(movieId);
+    UI.renderMovieDetails(movie);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+UI.renderMovieDetails("teste", modal);
 
 document.addEventListener("DOMContentLoaded", () => {
   if (isHomePage) {

@@ -2,6 +2,14 @@ import { UTILS } from "./utils";
 
 // Cria e renderiza os elementos HTML (cards, modais, etc.)
 
+const modalCover = document.querySelector(".modal__cover");
+const modalTitle = document.querySelector(".modal__title");
+const modalRating = document.querySelector(".banner__rating");
+const modalYear = document.querySelector(".modal__year");
+const modalDuration = document.querySelector(".modal__duration");
+const modalGenreContainer = document.querySelector(".modal__genre-row");
+const modalDescription = document.querySelector(".modal__description");
+
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 function createElement(tag, className, hasData) {
@@ -38,7 +46,25 @@ function renderMovieList(movies, container) {
   });
 }
 
+function renderMovieDetails(movie) {
+  modalCover.style.backgroundImage = `url('${IMAGE_BASE_URL}${movie.backdrop_path}')`;
+  modalTitle.innerText = movie.title;
+  modalRating.innerText = UTILS.formatRating(movie.vote_average);
+  modalYear.innerText = UTILS.getReleaseYear(movie.release_date);
+  modalDuration.innerText = movie.runtime + "min";
+  modalDescription.innerText = movie.overview;
+  modalGenreContainer.innerHTML = "";
+  if (movie.genres) {
+    movie.genres.forEach((genre) => {
+      let modalGenre = createElement("span", "modal__genre");
+      modalGenre.innerText = genre.name;
+      modalGenreContainer.appendChild(modalGenre);
+    });
+  }
+}
+
 export const UI = {
   createMovieCard,
   renderMovieList,
+  renderMovieDetails,
 };
