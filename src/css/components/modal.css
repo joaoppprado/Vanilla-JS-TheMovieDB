@@ -4,7 +4,7 @@
   margin: auto;
   width: calc(100% - 2rem);
   max-width: 350px;
-  max-height: calc(100vh - 2rem);
+  height: 564px;
   overflow-y: auto;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -98,8 +98,25 @@
 
 .modal__description {
   font-size: 0.9rem;
+  padding-right: 10px;
   line-height: 1.5;
   color: var(--text-muted);
+  max-height: 64px;
+  overflow: auto;
+}
+
+.modal__description::-webkit-scrollbar {
+  width: 5px;
+}
+
+.modal__description::-webkit-scrollbar-track {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+}
+
+.modal__description::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
 }
 
 .modal__actions {
@@ -155,6 +172,7 @@
 @media screen and (min-width: 1120px) {
   .modal {
     max-width: 1000px;
+    height: 784px;
   }
 
   .modal__close {
@@ -199,6 +217,9 @@
 
   .modal__description {
     font-size: 1.2rem;
+    height: 115px;
+    max-height: 115px;
+    overflow: auto;
   }
 
   .modal__actions {
