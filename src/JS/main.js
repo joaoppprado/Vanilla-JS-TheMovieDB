@@ -1,6 +1,7 @@
 //O "ponto de entrada" que liga os eventos da tela às funções
 import { API } from "./api.js";
 import { UI } from "./ui.js";
+import { initAutocomplete } from "./autocomplete.js";
 
 const menuButton = document.querySelector(".navigation__toggle");
 const menu = document.querySelector(".navigation__menu");
@@ -11,6 +12,8 @@ const filters = document.querySelectorAll(".filter");
 const modal = document.querySelector(".modal");
 const modalCloseBtn = document.querySelector(".modal__close");
 const cardsContainers = document.querySelectorAll(".section__movie-cards");
+
+let currentMovie = null;
 
 if (menuButton && menu) {
   menuButton.addEventListener("click", () => {
@@ -161,6 +164,7 @@ async function filterGenre(genreId) {
 async function getMovieDetails(movieId) {
   try {
     const movie = await API.getMovieDetails(movieId);
+    currentMovie = movie;
     UI.renderMovieDetails(movie);
   } catch (error) {
     console.log(error);
@@ -170,6 +174,8 @@ async function getMovieDetails(movieId) {
 UI.renderMovieDetails("teste", modal);
 
 document.addEventListener("DOMContentLoaded", () => {
+  initAutocomplete(getMovieDetails);
+
   if (isHomePage) {
     homePopularMovies();
     homeTopMovies();
