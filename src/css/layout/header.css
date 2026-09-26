@@ -27,6 +27,7 @@
   border-radius: 8px;
   width: 100%;
   max-width: 145px;
+  position: relative;
 }
 
 .search:focus-within {
@@ -57,6 +58,95 @@
   color: var(--text-main);
   outline: transparent;
   font-size: 0.8rem;
+}
+
+.search__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%);
+  width: 260px;
+  max-height: 380px;
+  overflow-y: auto;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-overlay);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.search__dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+
+.search__dropdown::-webkit-scrollbar-track {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+}
+
+.search__dropdown::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+.search__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  text-decoration: none;
+  color: var(--text-main);
+  text-align: left;
+}
+
+.search__item:last-child {
+  border-bottom: none;
+}
+
+.search__item:hover,
+.search__item.is-selected {
+  background-color: var(--bg-elevated);
+}
+
+.search__item-poster {
+  width: 36px;
+  height: 52px;
+  border-radius: 4px;
+  object-fit: cover;
+  background-color: var(--bg-tertiary);
+  flex-shrink: 0;
+}
+
+.search__item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.search__item-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search__item-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.search__empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .navigation__toggle {
@@ -96,6 +186,11 @@
 
   .search__input {
     font-size: 1rem;
+  }
+
+  .search__dropdown {
+    width: 100%;
+    max-width: 400px;
   }
 
   .navigation__toggle-icon {
