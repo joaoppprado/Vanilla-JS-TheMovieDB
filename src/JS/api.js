@@ -103,11 +103,38 @@ async function getMovieDetails(id) {
   }
 }
 
-async function searchMovieByName(query) {}
+async function searchMovieByName(query) {
+  if (!query || !query.trim()) {
+    return { results: [] };
+  }
+
+  const url = `${BASE_URL}/search/movie?query=${encodeURIComponent(query.trim())}&language=en-US&page=1`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${TMDB_TOKEN}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Error Search movies failed. API code error = ${response.status}`,
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("API error (searchMovieByName): ", error);
+  }
+}
 
 export const API = {
   getPopularMovies,
   getTopRatedMovies,
   getFilteredMovies,
   getMovieDetails,
+  searchMovieByName,
 };
