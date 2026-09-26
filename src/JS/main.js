@@ -40,8 +40,6 @@ cardsContainers.forEach((container) => {
     const card = event.target.closest("article");
     if (card) {
       getMovieDetails(card.dataset.movieId);
-      modal.showModal();
-      document.body.style.overflow = "hidden";
     }
   });
 });
@@ -166,6 +164,8 @@ async function getMovieDetails(movieId) {
     const movie = await API.getMovieDetails(movieId);
     currentMovie = movie;
     UI.renderMovieDetails(movie);
+    modal.showModal();
+    document.body.style.overflow = "hidden";
   } catch (error) {
     console.log(error);
   }
