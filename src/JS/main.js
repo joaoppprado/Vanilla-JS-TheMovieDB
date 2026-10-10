@@ -1,6 +1,7 @@
 //O "ponto de entrada" que liga os eventos da tela às funções
 import { API } from "./api.js";
 import { UI } from "./ui.js";
+import { STORAGE } from "./storage.js";
 import { initAutocomplete } from "./autocomplete.js";
 
 const menuButton = document.querySelector(".navigation__toggle");
@@ -8,12 +9,19 @@ const menu = document.querySelector(".navigation__menu");
 const isHomePage = document.getElementById("home-page");
 const isPopularPage = document.getElementById("popular-page");
 const isTopRatedPage = document.getElementById("top-rated-page");
+const isMyMoviesPage = document.getElementById("my-movies-page");
 const filters = document.querySelectorAll(".filter");
 const modal = document.querySelector(".modal");
 const modalCloseBtn = document.querySelector(".modal__close");
 const cardsContainers = document.querySelectorAll(".section__movie-cards");
 
+const btnFavorite = document.querySelector("#btn-favorite");
+const btnWatched = document.querySelector("#btn-watched");
+const btnLater = document.querySelector("#btn-later");
+
 let currentMovie = null;
+
+// --- Menu mobile ---
 
 if (menuButton && menu) {
   menuButton.addEventListener("click", () => {
@@ -27,6 +35,8 @@ if (menuButton && menu) {
   });
 }
 
+// --- Modal ---
+
 modalCloseBtn.addEventListener("click", () => {
   modal.close();
 });
@@ -34,6 +44,31 @@ modalCloseBtn.addEventListener("click", () => {
 modal.addEventListener("close", () => {
   document.body.style.overflow = "auto";
 });
+
+// --- Botões do modal (Favorito / Watched / Watch Later) ---
+
+btnFavorite.addEventListener("click", () => {
+  if (!currentMovie) return;
+  STORAGE.toggleFavorite(currentMovie);
+  UI.updateModalButtons(currentMovie.id);
+  if (isMyMoviesPage) renderCurrentTab();
+});
+
+btnWatched.addEventListener("click", () => {
+  if (!currentMovie) return;
+  STORAGE.toggleWatched(currentMovie);
+  UI.updateModalButtons(currentMovie.id);
+  if (isMyMoviesPage) renderCurrentTab();
+});
+
+btnLater.addEventListener("click", () => {
+  if (!currentMovie) return;
+  STORAGE.toggleWatchLater(currentMovie);
+  UI.updateModalButtons(currentMovie.id);
+  if (isMyMoviesPage) renderCurrentTab();
+});
+
+// --- Abrir detalhes ao clicar no card ---
 
 cardsContainers.forEach((container) => {
   container.addEventListener("click", (event) => {
@@ -43,6 +78,8 @@ cardsContainers.forEach((container) => {
     }
   });
 });
+
+// --- Filtros de gênero ---
 
 filters.forEach((filter) => {
   filter.addEventListener("click", () => {
@@ -59,12 +96,13 @@ filters.forEach((filter) => {
   });
 });
 
+// --- Funções de carregamento de filmes ---
+
 async function homePopularMovies() {
   const container = document.querySelector("#home-popular");
   try {
     const data = await API.getPopularMovies();
     const homeMovies = data.results.slice(0, 10);
-
     UI.renderMovieList(homeMovies, container);
   } catch (error) {
     console.log(error);
@@ -76,7 +114,6 @@ async function homeTopMovies() {
   try {
     const data = await API.getTopRatedMovies();
     const homeMovies = data.results.slice(0, 10);
-
     UI.renderMovieList(homeMovies, container);
   } catch (error) {
     console.log(error);
@@ -89,9 +126,7 @@ async function PagePopularMovies() {
     const page1 = await API.getPopularMovies();
     const page2 = await API.getPopularMovies(2);
     const page3 = await API.getPopularMovies(3);
-
     const movies = [...page1.results, ...page2.results, ...page3.results];
-
     UI.renderMovieList(movies, container);
   } catch (error) {
     console.log(error);
@@ -104,9 +139,7 @@ async function PageTopRatedMovies() {
     const page1 = await API.getTopRatedMovies();
     const page2 = await API.getTopRatedMovies(2);
     const page3 = await API.getTopRatedMovies(3);
-
     const movies = [...page1.results, ...page2.results, ...page3.results];
-
     UI.renderMovieList(movies, container);
   } catch (error) {
     console.log(error);
@@ -120,9 +153,7 @@ async function filterGenre(genreId) {
       const page1 = await API.getFilteredMovies(genreId, "popularity", 1);
       const page2 = await API.getFilteredMovies(genreId, "popularity", 2);
       const page3 = await API.getFilteredMovies(genreId, "popularity", 3);
-
       const movies = [...page1.results, ...page2.results, ...page3.results];
-
       UI.renderMovieList(movies, container);
     } catch (error) {
       console.log(error);
@@ -149,9 +180,7 @@ async function filterGenre(genreId) {
         3,
         "&without_genres=99,10755&vote_count.gte=200",
       );
-
       const movies = [...page1.results, ...page2.results, ...page3.results];
-
       UI.renderMovieList(movies, container);
     } catch (error) {
       console.log(error);
@@ -171,7 +200,53 @@ async function getMovieDetails(movieId) {
   }
 }
 
-UI.renderMovieDetails("teste", modal);
+// --- Página My Movies ---
+
+let activeTab = "favorites";
+
+const TAB_CONFIG = {
+  favorites: {
+    getMovies: STORAGE.getFavorites,
+    emptyMsg: "No favorites yet",
+  },
+  watchLater: {
+    getMovies: STORAGE.getWatchLater,
+    emptyMsg: "No movies added for later",
+  },
+  watched: {
+    getMovies: STORAGE.getWatched,
+    emptyMsg: "No watched movies yet",
+  },
+};
+
+function renderCurrentTab() {
+  const container = document.querySelector(".section__movie-cards");
+  const config = TAB_CONFIG[activeTab];
+  const movies = config.getMovies();
+
+  if (movies.length === 0) {
+    UI.renderEmptyState(container, config.emptyMsg);
+  } else {
+    UI.renderMovieList(movies, container);
+  }
+}
+
+function initMyMoviesPage() {
+  const tabs = document.querySelectorAll(".collection-tabs__tab");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("collection-tabs__tab--active"));
+      tab.classList.add("collection-tabs__tab--active");
+      activeTab = tab.dataset.tab;
+      renderCurrentTab();
+    });
+  });
+
+  renderCurrentTab();
+}
+
+// --- Inicialização ---
 
 document.addEventListener("DOMContentLoaded", () => {
   initAutocomplete(getMovieDetails);
@@ -185,5 +260,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (isTopRatedPage) {
     PageTopRatedMovies();
+  }
+  if (isMyMoviesPage) {
+    initMyMoviesPage();
   }
 });
