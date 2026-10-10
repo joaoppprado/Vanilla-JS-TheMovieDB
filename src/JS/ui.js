@@ -1,4 +1,5 @@
 import { UTILS } from "./utils";
+import { STORAGE } from "./storage";
 
 // Cria e renderiza os elementos HTML (cards, modais, etc.)
 
@@ -9,6 +10,10 @@ const modalYear = document.querySelector(".modal__year");
 const modalDuration = document.querySelector(".modal__duration");
 const modalGenreContainer = document.querySelector(".modal__genre-row");
 const modalDescription = document.querySelector(".modal__description");
+
+const btnFavorite = document.querySelector("#btn-favorite");
+const btnWatched = document.querySelector("#btn-watched");
+const btnLater = document.querySelector("#btn-later");
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -47,6 +52,8 @@ function renderMovieList(movies, container) {
 }
 
 function renderMovieDetails(movie) {
+  if (!movie || typeof movie !== "object") return;
+
   modalCover.style.backgroundImage = `url('${IMAGE_BASE_URL}${movie.backdrop_path}')`;
   modalTitle.innerText = movie.title;
   modalRating.innerText = UTILS.formatRating(movie.vote_average);
@@ -54,6 +61,7 @@ function renderMovieDetails(movie) {
   modalDuration.innerText = movie.runtime + "min";
   modalDescription.innerText = movie.overview;
   modalGenreContainer.innerHTML = "";
+
   if (movie.genres) {
     movie.genres.forEach((genre) => {
       let modalGenre = createElement("span", "modal__genre");
@@ -61,10 +69,37 @@ function renderMovieDetails(movie) {
       modalGenreContainer.appendChild(modalGenre);
     });
   }
+
+  updateModalButtons(movie.id);
+}
+
+function updateModalButtons(movieId) {
+  updateButton(btnFavorite, STORAGE.isFavorite(movieId), "Heart", "Favorite");
+  updateButton(btnWatched, STORAGE.isWatched(movieId), "Bookmark", "Watched");
+  updateButton(btnLater, STORAGE.isWatchLater(movieId), "Clock", "Watch Later");
+}
+
+function updateButton(btn, isActive, iconName, label) {
+  if (!btn) return;
+  const icon = btn.querySelector(".btn__icon");
+  const suffix = isActive ? "-filled" : "";
+  if (icon) icon.src = `./src/assets/${iconName}${suffix}.svg`;
+  btn.classList.toggle("btn--active", isActive);
+}
+
+function renderEmptyState(container, message) {
+  container.innerHTML = `
+    <div class="empty-state">
+      <p class="empty-state__title">${message}</p>
+      <p class="empty-state__description">Use the modal buttons to add movies here.</p>
+    </div>
+  `;
 }
 
 export const UI = {
   createMovieCard,
   renderMovieList,
   renderMovieDetails,
+  updateModalButtons,
+  renderEmptyState,
 };
