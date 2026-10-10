@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./src/css/main.css" />
     <title>CineLogo | Meus filmes</title>
   </head>
-  <body>
+  <body id="my-movies-page">
     <header class="header">
       <div class="container">
         <a href="index.html" class="header__logo">
@@ -69,11 +69,11 @@
         <h1 class="page-heading__title">My Movies</h1>
       </header>
       <div class="collection-tabs">
-        <button class="collection-tabs__tab collection-tabs__tab--active">
+        <button class="collection-tabs__tab collection-tabs__tab--active" data-tab="favorites">
           Favorites
         </button>
-        <button class="collection-tabs__tab">Watch Later</button>
-        <button class="collection-tabs__tab">Watched</button>
+        <button class="collection-tabs__tab" data-tab="watchLater">Watch Later</button>
+        <button class="collection-tabs__tab" data-tab="watched">Watched</button>
       </div>
       <section class="section__movie-cards"></section>
     </main>
@@ -100,7 +100,7 @@
         <div class="modal__actions">
           <button class="btn btn--secondary" id="btn-watched">
             <img
-              src="./src/assets/Check.svg"
+              src="./src/assets/Bookmark.svg"
               alt=""
               class="btn__icon"
               aria-hidden="true"
